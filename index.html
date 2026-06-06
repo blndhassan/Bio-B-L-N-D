@@ -48,7 +48,7 @@
         .top-nav { display: flex; justify-content: space-between; align-items: center; font-size: 10px; padding: 10px 5px; border-bottom: 1px solid rgba(0,242,255,0.2); }
         .ip-text { color: var(--c); font-weight: bold; }
         
-        /* دوگمەی تایبەت بە کۆپی کردنی لینک لە ناو ئەپەکەدا */
+        /* copy link */
         .copy-btn {
             background: rgba(0, 242, 255, 0.1);
             border: 1px solid var(--c);
@@ -159,8 +159,7 @@
     </div>
 
     <script>
-        // تێبینی: لێرە لە نێوان دوو کاپ بڕەکدا لینکی کۆتایی لاپەڕەکەت دابنێ دوای ئەوەی خستتە سەر ئینتەرنێت
-        const MY_BIO_URL = "لینکی ئۆنلاینی بایۆکەت لێرە دابنێ"; 
+        const MY_BIO_URL = "https://blndhassan.github.io/Bio-B-L-N-D/"; 
 
         let audioCtx;
         function initAudio() {
@@ -227,12 +226,13 @@
                 document.getElementById('hr').innerText = Math.floor(Math.random()*12) + 76;
             }, 2500);
         }
-
-        // فەنکشنی سەرەکی کۆپی کردنی لینکەکە
+         // link 
         function copyBioLink() {
-            if(MY_BIO_URL === "لینکی ئۆنلاینی بایۆکەت لێرە دابنێ") {
-                alert("تکایە سەرەتا لینکە فەرمییەکەت لە هێڵکاری گۆڕاوەکەدا (دێڕی ١٢٨) دابنێ.");
+            if(MY_BIO_URL === " https://github.com/blndhassan/Bio-B-L-N-D ") {
+                alert("copy link");
                 return;
+                const bioLink = "https://blndhassan.github.io/Bio-B-L-N-D/";
+        
             }
             navigator.clipboard.writeText(MY_BIO_URL).then(() => {
                 playSound(1500, 0.08); 
@@ -240,7 +240,7 @@
                 term.innerHTML += `<div class="term-ln" style="color:var(--c)">> LINK COPIED TO CLIPBOARD!</div>`;
                 if(term.children.length > 4) term.removeChild(term.children[0]);
             }).catch(err => {
-                alert("سەرکەوتو نەبوو، دەتوانیت بە دەست کۆپی بکەیت.");
+                alert(" ،   cancel  .");
             });
         }
     </script>
