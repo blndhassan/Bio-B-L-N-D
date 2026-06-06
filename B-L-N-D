@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>B-L-N-D | V8 ULTIMATE HUD</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BLND HUD">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --c: #00f2ff; --g: #00ff41; --r: #ff0055; --bg: #010a14; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); color: #fff; font-family: 'Share Tech Mono', monospace; overflow: hidden; }
+
+        /* --- STAGE 1: LOGO INTRO --- */
+        #intro-screen {
+            position: fixed; inset: 0; z-index: 1000; background: var(--bg);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 0.8s ease-in-out;
+        }
+        .intro-logo { font-family: 'Orbitron'; font-size: 3.5rem; letter-spacing: 15px; color: var(--c); text-shadow: 0 0 30px var(--c); animation: float 3s infinite; }
+        .intro-user { font-size: 12px; letter-spacing: 4px; color: var(--g); margin-top: 15px; text-transform: uppercase; }
+
+        /* --- STAGE 2: FINGERPRINT --- */
+        #lock-screen {
+            position: fixed; inset: 0; z-index: 900; background: var(--bg);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .fp-scanner {
+            width: 130px; height: 160px; border: 2px solid var(--c); border-radius: 20px;
+            display: flex; align-items: center; justify-content: center; font-size: 70px;
+            color: var(--c); position: relative; cursor: pointer;
+            box-shadow: inset 0 0 20px rgba(0,242,255,0.1), 0 0 15px rgba(0,242,255,0.2);
+        }
+        .fp-scanner i { filter: drop-shadow(0 0 10px var(--c)); }
+        .scan-line {
+            position: absolute; width: 100%; height: 3px; background: var(--c);
+            box-shadow: 0 0 15px var(--c); top: 0; animation: scan 2s linear infinite;
+        }
+
+        /* --- STAGE 3: MAIN DASHBOARD --- */
+        #dashboard { display: none; padding: 10px; height: 100vh; flex-direction: column; justify-content: space-between; }
+        
+        .top-nav { display: flex; justify-content: space-between; align-items: center; font-size: 10px; padding: 10px 5px; border-bottom: 1px solid rgba(0,242,255,0.2); }
+        .ip-text { color: var(--c); font-weight: bold; }
+        
+        /* دوگمەی تایبەت بە کۆپی کردنی لینک لە ناو ئەپەکەدا */
+        .copy-btn {
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--c);
+            color: var(--c);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: 'Share Tech Mono', monospace;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        .copy-btn:active {
+            background: var(--c);
+            color: #000;
+            box-shadow: 0 0 10px var(--c);
+        }
+
+        .mid-section { flex-grow: 1; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+        /* Advanced 3D Body */
+        .body-3d { position: absolute; height: 280px; width: 160px; transform-style: preserve-3d; animation: rotateY 12s linear infinite; z-index: 1; }
+        .body-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 15px var(--c)); opacity: 0.6; }
+
+        /* Radar System */
+        .radar { position: absolute; width: 260px; height: 260px; border: 1px solid rgba(0,242,255,0.15); border-radius: 50%; pointer-events: none; z-index: 0; }
+        .radar-sweep { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, transparent 70%, rgba(0,242,255,0.3)); animation: rotate 4s linear infinite; }
+
+        /* Panels */
+        .panel { position: absolute; z-index: 10; padding: 10px; background: rgba(1, 10, 20, 0.75); border: 1px solid rgba(0,242,255,0.25); border-radius: 8px; backdrop-filter: blur(5px); }
+        .left-p { left: 5px; top: 15%; width: 110px; }
+        .right-p { right: 5px; top: 10%; display: flex; flex-direction: column; gap: 10px; border: none; background: transparent; backdrop-filter: none; }
+
+        /* Social Icons */
+        .s-link { width: 45px; height: 45px; border: 1px solid rgba(0,242,255,0.3); border-radius: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #fff; font-size: 22px; background: rgba(1, 10, 20, 0.6); transition: all 0.3s ease; }
+        .s-link:hover, .s-link:active { transform: scale(1.1); box-shadow: 0 0 15px rgba(0,242,255,0.4); }
+
+        /* Terminal */
+        .term-box { height: 90px; background: rgba(0,0,0,0.85); border: 1px solid rgba(0,242,255,0.2); padding: 8px; font-size: 11px; overflow: hidden; }
+        .term-ln { color: var(--g); margin-bottom: 3px; letter-spacing: 1px; }
+
+        /* Animations */
+        @keyframes scan { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
+        @keyframes rotate { to { transform: rotate(360deg); } }
+        @keyframes rotateY { from { transform: rotateY(0); } to { transform: rotateY(360deg); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .footer-logo { text-align: center; font-family: 'Orbitron'; font-size: 1.5rem; letter-spacing: 10px; padding: 10px 0; border-top: 1px solid rgba(0,242,255,0.15); color: rgba(255,255,255,0.7); }
+    </style>
+</head>
+<body>
+
+    <div id="intro-screen">
+        <div class="intro-logo">B-L-N-D</div>
+        <div class="intro-user">MR.BLNDHASSAN</div>
+    </div>
+
+    <div id="lock-screen">
+        <div class="fp-scanner" id="fp-auth">
+            <div class="scan-line"></div>
+            <i class="fas fa-fingerprint"></i>
+        </div>
+        <p style="margin-top: 25px; color: var(--c); font-size: 11px; letter-spacing: 2px; text-align: center;">HOLD TO VERIFY IDENTITY</p>
+    </div>
+
+    <div id="dashboard">
+        <div class="top-nav">
+            <div>IP: <span class="ip-text">10.0.48.225</span></div>
+            <button class="copy-btn" onclick="copyBioLink()">[ COPY BIO LINK ]</button>
+            <div>LINK: <span style="color:var(--g)">SECURE</span></div>
+        </div>
+
+        <div class="mid-section">
+            <div class="radar"><div class="radar-sweep"></div></div>
+            
+            <div class="body-3d">
+                <svg class="body-svg" viewBox="0 0 200 500">
+                    <path d="M100 50C115 50 125 35 125 20C125 5 115 0 100 0C85 0 75 5 75 20C75 35 85 50 100 50Z" fill="var(--c)" opacity="0.4"/>
+                    <path d="M70 80H130L145 250H55L70 80Z" stroke="var(--c)" stroke-width="2" fill="none"/>
+                    <path d="M75 250V450M125 250V450" stroke="var(--c)" stroke-width="3"/>
+                    <circle cx="100" cy="110" r="10" fill="var(--r)">
+                        <animate attributeName="opacity" values="0.2;1;0.2" dur="1s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>
+            </div>
+
+            <div class="panel left-p">
+                <div style="font-size:10px; margin-bottom:6px;"><i class="fas fa-heartbeat" style="color:var(--r)"></i> BPM: <span id="hr">84</span></div>
+                <div style="font-size:10px; margin-bottom:6px;"><i class="fas fa-brain" style="color:var(--c)"></i> NEURAL: OK</div>
+                <div style="font-size:10px; margin-bottom:6px;"><i class="fas fa-shield-virus" style="color:var(--g)"></i> IMMUNE: 127</div>
+            </div>
+
+            <div class="panel right-p">
+                <a href="https://instagram.com/mr.blndhassan" target="_blank" class="s-link" style="border-color:#E1306C; color:#E1306C;"><i class="fab fa-instagram"></i></a>
+                <a href="https://snapchat.com/add/mr.blndhassan" target="_blank" class="s-link" style="border-color:#FFFC00; color:#FFFC00;"><i class="fab fa-snapchat"></i></a>
+                <a href="https://tiktok.com/@mr.blndhassan" target="_blank" class="s-link" style="border-color:#00f2ea; color:#00f2ea;"><i class="fab fa-tiktok"></i></a>
+                <a href="https://t.me/Mrblndhassan" target="_blank" class="s-link" style="border-color:#0088cc; color:#0088cc;"><i class="fab fa-telegram"></i></a>
+                <a href="https://youtube.com/@mr.blndhassan" target="_blank" class="s-link" style="border-color:#FF0000; color:#FF0000;"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <div class="term-box" id="terminal-out">
+            <div class="term-ln">> System Booting...</div>
+            <div class="term-ln">> Establishing Satellite Connection...</div>
+        </div>
+
+        <div class="footer-logo">B-L-N-D</div>
+    </div>
+
+    <script>
+        // تێبینی: لێرە لە نێوان دوو کاپ بڕەکدا لینکی کۆتایی لاپەڕەکەت دابنێ دوای ئەوەی خستتە سەر ئینتەرنێت
+        const MY_BIO_URL = "لینکی ئۆنلاینی بایۆکەت لێرە دابنێ"; 
+
+        let audioCtx;
+        function initAudio() {
+            if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        }
+
+        function playSound(freq, dur) {
+            try {
+                initAudio();
+                if(audioCtx && audioCtx.state !== 'suspended') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(); osc.stop(audioCtx.currentTime + dur);
+                }
+            } catch(e) { console.log("Audio extensions blocked."); }
+        }
+
+        setTimeout(() => {
+            document.getElementById('intro-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('intro-screen').style.display = 'none';
+                document.getElementById('lock-screen').style.display = 'flex';
+            }, 800);
+        }, 2500);
+
+        const fp = document.getElementById('fp-auth');
+        fp.addEventListener('touchstart', (e) => { e.preventDefault(); handleAuth(); });
+        fp.addEventListener('mousedown', handleAuth);
+
+        function handleAuth() {
+            playSound(880, 0.15);
+            fp.style.color = '#00ff41';
+            fp.style.borderColor = '#00ff41';
+            
+            setTimeout(() => {
+                playSound(1200, 0.1);
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'flex';
+                runTerminal();
+            }, 1000);
+        }
+
+        function runTerminal() {
+            const term = document.getElementById('terminal-out');
+            const lines = [
+                "IP: 10.0.48.225 VERIFIED.",
+                "SCANNING MEDICAL DATA... OK",
+                "RADAR SYNC: ACTIVE.",
+                "WELCOME, MR.BLNDHASSAN."
+            ];
+            let i = 0;
+            setInterval(() => {
+                if(i < lines.length) {
+                    term.innerHTML += `<div class="term-ln">> ${lines[i]}</div>`; i++;
+                }
+                if(term.children.length > 4) term.removeChild(term.children[0]);
+            }, 1500);
+
+            setInterval(() => {
+                document.getElementById('hr').innerText = Math.floor(Math.random()*12) + 76;
+            }, 2500);
+        }
+
+        // فەنکشنی سەرەکی کۆپی کردنی لینکەکە
+        function copyBioLink() {
+            if(MY_BIO_URL === "لینکی ئۆنلاینی بایۆکەت لێرە دابنێ") {
+                alert("تکایە سەرەتا لینکە فەرمییەکەت لە هێڵکاری گۆڕاوەکەدا (دێڕی ١٢٨) دابنێ.");
+                return;
+            }
+            navigator.clipboard.writeText(MY_BIO_URL).then(() => {
+                playSound(1500, 0.08); 
+                const term = document.getElementById('terminal-out');
+                term.innerHTML += `<div class="term-ln" style="color:var(--c)">> LINK COPIED TO CLIPBOARD!</div>`;
+                if(term.children.length > 4) term.removeChild(term.children[0]);
+            }).catch(err => {
+                alert("سەرکەوتو نەبوو، دەتوانیت بە دەست کۆپی بکەیت.");
+            });
+        }
+    </script>
+</body>
+</html>
