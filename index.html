@@ -2,6 +2,110 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B-L-N-D | V8 ULTIMATE HUD</title>
+    <style>
+        :root { --c: #00f2ff; --g: #00ff41; --bg: #010a14; }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', monospace; margin: 0; padding: 10px; }
+        
+        .hud-top { display: flex; align-items: center; gap: 15px; }
+        .menu-btn { cursor: pointer; color: var(--c); font-size: 24px; padding: 5px; }
+        
+        #content-area { 
+            display: none; background: rgba(0, 15, 25, 0.98); 
+            border: 2px solid var(--c); padding: 20px; border-radius: 12px; 
+            backdrop-filter: blur(15px); margin-top: 10px;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+        }
+        .grid-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; }
+        .header { color: var(--c); border-bottom: 2px solid var(--c); margin-bottom: 12px; font-weight: bold; font-size: 15px; text-shadow: 0 0 5px var(--c); }
+        .price { color: var(--g); font-weight: bold; font-size: 14px; }
+        .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .lang-box { border: 1px solid var(--c); padding: 6px; text-align: center; font-size: 11px; cursor: pointer; color: var(--c); font-weight: bold; transition: 0.3s; }
+        .lang-box:hover { background: var(--c); color: #000; }
+        .cv-text { font-size: 13px; line-height: 1.6; color: #e0e0e0; }
+    </style>
+</head>
+<body>
+
+    <div class="hud-top">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <div style="font-size: 18px; color: var(--c);">B-L-N-D SYSTEM</div>
+    </div>
+
+    <div id="content-area">
+        <div class="grid-layout">
+            <div>
+                <div class="header" id="srv-title">Services</div>
+                <div style="font-size: 12px;"><span id="txt-small">Small</span>: <span class="price">3,000 IQD</span></div>
+                <div style="font-size: 12px;"><span id="txt-large">Adult</span>: <span class="price">5,000 IQD</span></div>
+                
+                <div class="header" style="margin-top: 20px;" id="lang-title">Languages</div>
+                <div class="lang-grid">
+                    <div class="lang-box" onclick="setLang('en')">ENGLISH</div>
+                    <div class="lang-box" onclick="setLang('bd')">BADINI</div>
+                    <div class="lang-box" onclick="setLang('ku')">SORANI</div>
+                    <div class="lang-box" onclick="setLang('ar')">ARABIC</div>
+                </div>
+            </div>
+            
+            <div class="cv-text" id="cv-display">
+                <div class="header" id="cv-title">CV DATA</div>
+                Please select a language...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const uiData = {
+            'en': { srv: "Services", small: "Small", large: "Adult", lang: "Languages", cv: "CV DATA" },
+            'bd': { srv: "خزمەتگوزاری", small: "بچوک", large: "مەزن", lang: "زمان", cv: "زانیاریێن CV" },
+            'ku': { srv: "خزمەتگوزاری", small: "منداڵ", large: "گەورە", lang: "زمان", cv: "زانیارییەکانی CV" },
+            'ar': { srv: "الخدمات", small: "صغير", large: "كبير", lang: "اللغات", cv: "بيانات السيرة الذاتية" }
+        };
+
+        const cvData = {
+            'en': `<b>BLND HASSAN</b><br>Professional Driver & IT Specialist<br><br>
+                   <b>Profile:</b> Ability to operate all types of heavy and light vehicles, maintenance expert, barbering, hacking, AI, and programming.<br>
+                   <b>Languages:</b> Kurdish (Native), English (Very Good), Arabic (Good).`,
+            'bd': `<b>بڵند حەسەن</b><br>شوڤێر و پسپۆرێ IT<br><br>
+                   <b>پڕۆفایل:</b> توانای هاژوتنا هەمی جورین ترۆمبێلان و باڵ هەلگرا هەیە، شارەزا د چاککرن و کاری حەلاقی، هاک، AI و پڕۆگرامینگی.<br>
+                   <b>زمان:</b> کوردی (رەسەن)، ئینگلیزی (گەلەک باش)، عەرەبی (باش).`,
+            'ku': `<b>بڵند حەسەن</b><br>شوفێر و پسپۆڕی IT<br><br>
+                   <b>پڕۆفایل:</b> توانای لێخوڕینی هەموو جۆرە ئۆتۆمبێلێک و هەڵگرتنی بار، شارەزا لە چاککردنەوە و کاری حەڵاقی، هاک، AI و پڕۆگرامسازی.<br>
+                   <b>زمان:</b> کوردی (رەسەن)، ئینگلیزی (زۆر باش)، عەرەبی (باش).`,
+            'ar': `<b>بلند حسن</b><br>سائق ومختص IT<br><br>
+                   <b>الملف الشخصي:</b> لديه القدرة على قيادة جميع أنواع المركبات الثقيلة والخفيفة، خبير في الصيانة، الحلاقة، الهاك، الذكاء الاصطناعي (AI)، والبرمجة.<br>
+                   <b>اللغات:</b> الكردية (الأم)، الإنجليزية (جيد جداً)، العربية (جيد).`
+        };
+
+        function toggleMenu() {
+            var x = document.getElementById("content-area");
+            x.style.display = (x.style.display === "block") ? "none" : "block";
+        }
+
+        function setLang(lang) {
+            document.getElementById('srv-title').innerText = uiData[lang].srv;
+            document.getElementById('txt-small').innerText = uiData[lang].small;
+            document.getElementById('txt-large').innerText = uiData[lang].large;
+            document.getElementById('lang-title').innerText = uiData[lang].lang;
+            document.getElementById('cv-display').innerHTML = '<div class="header">' + uiData[lang].cv + '</div>' + cvData[lang];
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>B-L-N-D | V8 ULTIMATE HUD</title>
     
@@ -207,5 +311,5 @@
         }
     </script>
 </body>
-                    </html>
+    </html>
                     
