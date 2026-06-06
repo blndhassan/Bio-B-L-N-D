@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -16,7 +16,6 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); color: #fff; font-family: 'Share Tech Mono', monospace; overflow: hidden; }
 
-        /* --- STAGE 1: LOGO INTRO --- */
         #intro-screen {
             position: fixed; inset: 0; z-index: 1000; background: var(--bg);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -25,7 +24,6 @@
         .intro-logo { font-family: 'Orbitron'; font-size: 3.5rem; letter-spacing: 15px; color: var(--c); text-shadow: 0 0 30px var(--c); animation: float 3s infinite; }
         .intro-user { font-size: 12px; letter-spacing: 4px; color: var(--g); margin-top: 15px; text-transform: uppercase; }
 
-        /* --- STAGE 2: FINGERPRINT --- */
         #lock-screen {
             position: fixed; inset: 0; z-index: 900; background: var(--bg);
             display: none; flex-direction: column; align-items: center; justify-content: center;
@@ -42,55 +40,34 @@
             box-shadow: 0 0 15px var(--c); top: 0; animation: scan 2s linear infinite;
         }
 
-        /* --- STAGE 3: MAIN DASHBOARD --- */
         #dashboard { display: none; padding: 10px; height: 100vh; flex-direction: column; justify-content: space-between; }
-        
         .top-nav { display: flex; justify-content: space-between; align-items: center; font-size: 10px; padding: 10px 5px; border-bottom: 1px solid rgba(0,242,255,0.2); }
         .ip-text { color: var(--c); font-weight: bold; }
         
-        /* copy link */
         .copy-btn {
-            background: rgba(0, 242, 255, 0.1);
-            border: 1px solid var(--c);
-            color: var(--c);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-family: 'Share Tech Mono', monospace;
-            cursor: pointer;
-            font-size: 10px;
-            font-weight: bold;
-            transition: all 0.2s ease;
+            background: rgba(0, 242, 255, 0.1); border: 1px solid var(--c); color: var(--c);
+            padding: 4px 10px; border-radius: 4px; font-family: 'Share Tech Mono', monospace;
+            cursor: pointer; font-size: 10px; font-weight: bold; transition: all 0.2s ease;
         }
-        .copy-btn:active {
-            background: var(--c);
-            color: #000;
-            box-shadow: 0 0 10px var(--c);
-        }
+        .copy-btn:active { background: var(--c); color: #000; box-shadow: 0 0 10px var(--c); }
 
         .mid-section { flex-grow: 1; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-
-        /* Advanced 3D Body */
         .body-3d { position: absolute; height: 280px; width: 160px; transform-style: preserve-3d; animation: rotateY 12s linear infinite; z-index: 1; }
         .body-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 15px var(--c)); opacity: 0.6; }
 
-        /* Radar System */
         .radar { position: absolute; width: 260px; height: 260px; border: 1px solid rgba(0,242,255,0.15); border-radius: 50%; pointer-events: none; z-index: 0; }
         .radar-sweep { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, transparent 70%, rgba(0,242,255,0.3)); animation: rotate 4s linear infinite; }
 
-        /* Panels */
         .panel { position: absolute; z-index: 10; padding: 10px; background: rgba(1, 10, 20, 0.75); border: 1px solid rgba(0,242,255,0.25); border-radius: 8px; backdrop-filter: blur(5px); }
         .left-p { left: 5px; top: 15%; width: 110px; }
         .right-p { right: 5px; top: 10%; display: flex; flex-direction: column; gap: 10px; border: none; background: transparent; backdrop-filter: none; }
 
-        /* Social Icons */
         .s-link { width: 45px; height: 45px; border: 1px solid rgba(0,242,255,0.3); border-radius: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #fff; font-size: 22px; background: rgba(1, 10, 20, 0.6); transition: all 0.3s ease; }
         .s-link:hover, .s-link:active { transform: scale(1.1); box-shadow: 0 0 15px rgba(0,242,255,0.4); }
 
-        /* Terminal */
         .term-box { height: 90px; background: rgba(0,0,0,0.85); border: 1px solid rgba(0,242,255,0.2); padding: 8px; font-size: 11px; overflow: hidden; }
         .term-ln { color: var(--g); margin-bottom: 3px; letter-spacing: 1px; }
 
-        /* Animations */
         @keyframes scan { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
         @keyframes rotate { to { transform: rotate(360deg); } }
         @keyframes rotateY { from { transform: rotateY(0); } to { transform: rotateY(360deg); } }
@@ -146,7 +123,7 @@
                 <a href="https://snapchat.com/add/mr.blndhassan" target="_blank" class="s-link" style="border-color:#FFFC00; color:#FFFC00;"><i class="fab fa-snapchat"></i></a>
                 <a href="https://tiktok.com/@mr.blndhassan" target="_blank" class="s-link" style="border-color:#00f2ea; color:#00f2ea;"><i class="fab fa-tiktok"></i></a>
                 <a href="https://t.me/Mrblndhassan" target="_blank" class="s-link" style="border-color:#0088cc; color:#0088cc;"><i class="fab fa-telegram"></i></a>
-                <a href="https://youtube.com/@mr.blndhassan" target="_blank" class="s-link" style="border-color:#FF0000; color:#FF0000;"><i class="fab fa-youtube"></i></a>
+                <a href="https://youtube.com/@blndhassan" target="_blank" class="s-link" style="border-color:#FF0000; color:#FF0000;"><i class="fab fa-youtube"></i></a>
             </div>
         </div>
 
@@ -159,26 +136,23 @@
     </div>
 
     <script>
+        // Official GitHub Pages URL integrated successfully
         const MY_BIO_URL = "https://blndhassan.github.io/Bio-B-L-N-D/"; 
 
         let audioCtx;
-        function initAudio() {
-            if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-        }
+        function initAudio() { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } }
 
         function playSound(freq, dur) {
             try {
                 initAudio();
                 if(audioCtx && audioCtx.state !== 'suspended') {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
                     gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
                     osc.connect(gain); gain.connect(audioCtx.destination);
                     osc.start(); osc.stop(audioCtx.currentTime + dur);
                 }
-            } catch(e) { console.log("Audio extensions blocked."); }
+            } catch(e) {}
         }
 
         setTimeout(() => {
@@ -194,55 +168,44 @@
         fp.addEventListener('mousedown', handleAuth);
 
         function handleAuth() {
-            playSound(880, 0.15);
-            fp.style.color = '#00ff41';
-            fp.style.borderColor = '#00ff41';
-            
+            playSound(880, 0.15); fp.style.color = '#00ff41'; fp.style.borderColor = '#00ff41';
             setTimeout(() => {
-                playSound(1200, 0.1);
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'flex';
-                runTerminal();
+                playSound(1200, 0.1); document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'flex'; runTerminal();
             }, 1000);
         }
 
         function runTerminal() {
             const term = document.getElementById('terminal-out');
-            const lines = [
-                "IP: 10.0.48.225 VERIFIED.",
-                "SCANNING MEDICAL DATA... OK",
-                "RADAR SYNC: ACTIVE.",
-                "WELCOME, MR.BLNDHASSAN."
-            ];
+            const lines = ["IP: 10.0.48.225 VERIFIED.", "SCANNING DATA... OK", "RADAR SYNC: ACTIVE.", "WELCOME, MR.BLNDHASSAN."];
             let i = 0;
             setInterval(() => {
-                if(i < lines.length) {
-                    term.innerHTML += `<div class="term-ln">> ${lines[i]}</div>`; i++;
-                }
+                if(i < lines.length) { term.innerHTML += `<div class="term-ln">> ${lines[i]}</div>`; i++; }
                 if(term.children.length > 4) term.removeChild(term.children[0]);
             }, 1500);
-
-            setInterval(() => {
-                document.getElementById('hr').innerText = Math.floor(Math.random()*12) + 76;
-            }, 2500);
+            setInterval(() => { document.getElementById('hr').innerText = Math.floor(Math.random()*12) + 76; }, 2500);
         }
-         // link 
+
         function copyBioLink() {
-            if(MY_BIO_URL === " https://github.com/blndhassan/Bio-B-L-N-D ") {
-                alert("copy link");
-                return;
-                const bioLink = "https://blndhassan.github.io/Bio-B-L-N-D/";
-        
-            }
             navigator.clipboard.writeText(MY_BIO_URL).then(() => {
-                playSound(1500, 0.08); 
-                const term = document.getElementById('terminal-out');
+                playSound(1500, 0.08); const term = document.getElementById('terminal-out');
                 term.innerHTML += `<div class="term-ln" style="color:var(--c)">> LINK COPIED TO CLIPBOARD!</div>`;
                 if(term.children.length > 4) term.removeChild(term.children[0]);
-            }).catch(err => {
-                alert(" ،   cancel  .");
+            }).catch(err => { 
+                // Fallback mechanics for mobile webviews
+                const el = document.createElement('textarea');
+                el.value = MY_BIO_URL;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                
+                playSound(1500, 0.08); const term = document.getElementById('terminal-out');
+                term.innerHTML += `<div class="term-ln" style="color:var(--c)">> LINK COPIED TO CLIPBOARD!</div>`;
+                if(term.children.length > 4) term.removeChild(term.children[0]);
             });
         }
     </script>
 </body>
-  </html>
+                                                                                                                                  </html>
+                                                                                                                                              
